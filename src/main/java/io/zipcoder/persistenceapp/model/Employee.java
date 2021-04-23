@@ -2,6 +2,7 @@ package io.zipcoder.persistenceapp.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Employee {
@@ -92,5 +93,33 @@ public class Employee {
 
     public void setDepartmentNumber(Long departmentNumber) {
         this.departmentNumber = departmentNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(employeeNumber, employee.employeeNumber) && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(title, employee.title) && Objects.equals(phoneNumber, employee.phoneNumber) && Objects.equals(email, employee.email) && Objects.equals(hireDate, employee.hireDate) && Objects.equals(managerID, employee.managerID) && Objects.equals(departmentNumber, employee.departmentNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeNumber, firstName, lastName, title, phoneNumber, email, hireDate, managerID, departmentNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeNumber=" + employeeNumber +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", title='" + title + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", hireDate=" + hireDate +
+                ", managerID=" + managerID +
+                ", departmentNumber=" + departmentNumber +
+                '}';
     }
 }

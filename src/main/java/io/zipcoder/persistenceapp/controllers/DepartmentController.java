@@ -1,6 +1,7 @@
 package io.zipcoder.persistenceapp.controllers;
 
 import io.zipcoder.persistenceapp.model.Department;
+import io.zipcoder.persistenceapp.model.Employee;
 import io.zipcoder.persistenceapp.services.DepartmentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,4 +39,16 @@ public class DepartmentController {
     public ResponseEntity<Boolean> deleteDepartment(@PathVariable Long id) {
         return new ResponseEntity<>(departmentServices.deleteDepartment(id), HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/updatemanager/{id}")
+    public ResponseEntity<Department> updateDepartmentManager(@PathVariable Long id, @RequestBody Department department) {
+        return new ResponseEntity<>(departmentServices.updateDepartmentManager(id, department), HttpStatus.OK);
+    }
+
+    @PutMapping("/updatename/{id}")
+    public ResponseEntity<Department> updateDepartmentName(@PathVariable Long id, @RequestBody Department department) {
+        return new ResponseEntity<>(departmentServices.updateDepartmentName(id, department), HttpStatus.OK);
+    }
+
+
 }

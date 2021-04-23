@@ -44,4 +44,16 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServices.deleteEmployee(id), HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/updatemanager/{id}")
+    public ResponseEntity<Employee> updateEmployeeManager(@PathVariable Long id, @RequestBody Employee manager) {
+        return new ResponseEntity<>(employeeServices.updateEmployeeManager(id, manager), HttpStatus.OK);
+    }
+
+    @GetMapping("/manager/{id}")
+    public ResponseEntity<List<Employee>> findEmployeesUnderManager(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.findEmployeesUnderManager(id), HttpStatus.OK);
+    }
+
+
+
 }

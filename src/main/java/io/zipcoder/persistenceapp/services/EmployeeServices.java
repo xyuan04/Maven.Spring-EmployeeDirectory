@@ -52,4 +52,26 @@ public class EmployeeServices {
         employeeRepository.delete(id);
         return true;
     }
+
+    public Employee updateEmployeeManager(Long id, Employee manager) {
+        Employee ogEmployee = employeeRepository.findOne(id);
+
+        ogEmployee.setManagerID(manager.getEmployeeNumber());
+
+        return employeeRepository.save(ogEmployee);
+    }
+
+    public List<Employee> findEmployeesUnderManager(Long id) {
+        List<Employee> employeeList = new ArrayList<>();
+
+        List<Employee> allEmp = getAllEmployees();
+
+        for(Employee emp : allEmp) {
+            if(emp.getManagerID() == id) {
+                employeeList.add(emp);
+            }
+        }
+
+        return employeeList;
+    }
 }

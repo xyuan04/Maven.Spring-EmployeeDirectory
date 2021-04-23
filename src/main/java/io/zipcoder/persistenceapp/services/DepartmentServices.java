@@ -1,6 +1,7 @@
 package io.zipcoder.persistenceapp.services;
 
 import io.zipcoder.persistenceapp.model.Department;
+import io.zipcoder.persistenceapp.model.Employee;
 import io.zipcoder.persistenceapp.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,21 @@ public class DepartmentServices {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public Department updateDepartmentManager(Long id, Department department) {
+        Department ogDepartment = departmentRepository.findOne(id);
+
+        ogDepartment.setDepartmentManagerId(department.getDepartmentManagerId());
+
+        return departmentRepository.save(ogDepartment);
+    }
+
+    public Department updateDepartmentName(Long id, Department department) {
+        Department ogDepartment = departmentRepository.findOne(id);
+
+        ogDepartment.setName(department.getName());
+
+        return departmentRepository.save(ogDepartment);
     }
 }
