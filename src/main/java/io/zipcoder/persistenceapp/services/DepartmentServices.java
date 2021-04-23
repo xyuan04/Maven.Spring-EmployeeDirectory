@@ -46,7 +46,8 @@ public class DepartmentServices {
             departmentRepository.delete(id);
             return true;
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
+        return false;
     }
 }
