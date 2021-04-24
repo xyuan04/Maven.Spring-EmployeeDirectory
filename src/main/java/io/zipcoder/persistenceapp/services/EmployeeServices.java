@@ -150,10 +150,13 @@ public class EmployeeServices {
 
     //remove all employees under a particular manager
     public Boolean removeAllEmployeesUnderManager(Long id) {
-        List<Employee> minionList = new ArrayList<>();
+        List<Employee> minionList = getAllEmployees();
+        Employee manager = getEmployee(id);
 
         for(Employee employee : minionList) {
-            employeeRepository.delete(employee.getEmployeeNumber());
+            if(employee.getManagerID() == manager.getEmployeeNumber()) {
+                employeeRepository.delete(employee.getEmployeeNumber());
+            }
         }
 
         return true;
@@ -168,7 +171,7 @@ public class EmployeeServices {
             Employee replacingManager = employeeRepository.findOne(toBeDeletedEmployee.getManagerID());
             for(Employee employee : getAllEmployees()) {
                 if(employee.getManagerID() == toBeDeletedEmployee.getEmployeeNumber()) {
-                    employee.setManagerID(replacingManager.getManagerID());
+                    employee.setManagerID(replacingManager.getEmployeeNumber());
                     employeeRepository.save(employee);
                     absorbedEmployees.add(employee);
                 }
@@ -176,6 +179,8 @@ public class EmployeeServices {
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+        employeeRepository.delete(toBeDeletedEmployee.getEmployeeNumber());
         return absorbedEmployees;
     }
 

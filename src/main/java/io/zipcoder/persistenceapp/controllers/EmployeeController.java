@@ -69,5 +69,36 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServices.findEmployeesOfDepartment(id), HttpStatus.OK);
     }
 
+    //Still needs work
+    @GetMapping("/allreports/{id}")
+    public ResponseEntity<List<Employee>> findAllMinionsUnder(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.findAllMinionsUnder(id), HttpStatus.OK);
+    }
+
+    //not sure of mapping
+    @DeleteMapping("/removelist")
+    public ResponseEntity<Boolean> removeListOfEmployees(List<Employee> employees) {
+        return new ResponseEntity<>(employeeServices.removeListOfEmployees(employees), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/removedepartment/{id}")
+    public ResponseEntity<Boolean> removeEmployeesFromDepartment(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.removeEmployeesFromDepartment(id), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("manager/{id}/removeemployees")
+    public ResponseEntity<Boolean> removeAllEmployeesUnderManager(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.removeAllEmployeesUnderManager(id), HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("manager/{id}/replace")
+    public ResponseEntity<List<Employee>> replaceManagerAndAbsorbEmployees(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.replaceManagerAndAbsorbEmployees(id), HttpStatus.OK);
+    }
+
+    @GetMapping("attributes/{id}")
+    public ResponseEntity<String> getEmployeeAttributes(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.getEmployeeAttributes(id), HttpStatus.OK);
+    }
 
 }
