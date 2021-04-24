@@ -54,6 +54,20 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServices.findEmployeesUnderManager(id), HttpStatus.OK);
     }
 
+    @GetMapping("/hierarchy/{id}")
+    public ResponseEntity<List<Employee>> findHierarchy(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.findHierarchy(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/solo")
+    public ResponseEntity<List<Employee>> findSoloWorkers() {
+        return new ResponseEntity<>(employeeServices.findSoloWorkers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/department/{id}")
+    public ResponseEntity<List<Employee>> findEmployeesOfDepartment(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeServices.findEmployeesOfDepartment(id), HttpStatus.OK);
+    }
 
 
 }

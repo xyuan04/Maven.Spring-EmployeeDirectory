@@ -74,4 +74,114 @@ public class EmployeeServices {
 
         return employeeList;
     }
+
+    public List<Employee> findHierarchy(Long id) {
+        List<Employee> managerList = new ArrayList<>();
+        Employee currentEmployee = employeeRepository.findOne(id);
+
+        while(currentEmployee.getManagerID() != null) {
+            managerList.add(employeeRepository.findOne(currentEmployee.getManagerID()));
+            currentEmployee = employeeRepository.findOne(currentEmployee.getManagerID());
+        }
+
+        return managerList;
+    }
+
+    public List<Employee> findSoloWorkers() {
+        List<Employee> soloList = new ArrayList<>();
+
+        for(Employee employee : employeeRepository.findAll()) {
+            if(employee.getManagerID() == null) {
+                soloList.add(employee);
+            }
+        }
+
+        return soloList;
+    }
+
+    public List<Employee> findEmployeesOfDepartment(Long id) {
+        List<Employee> departmentEmployees = new ArrayList<>();
+
+        for(Employee employee : employeeRepository.findAll()) {
+            if(employee.getDepartmentNumber() == id) {
+                departmentEmployees.add(employee);
+            }
+        }
+
+        return departmentEmployees;
+    }
+
+    public List<Employee> findAllMinionsUnder(Long id) {
+        List<Employee> minionList = new ArrayList<>();
+        Employee currentEmployee = employeeRepository.findOne(id);
+        boolean found = true;
+
+        while(found) {
+            found = false;
+            for(Employee employee : employeeRepository.findAll()) {
+                if(employee.getManagerID() == currentEmployee.getEmployeeNumber()) {
+                    minionList.add(employee);
+                    found = true;
+                }
+            }
+        }
+
+        return minionList;
+    }
+
+    //remove a particular employee or list of employees
+    public Boolean removeListOfEmployees(List<Employee> employees) {
+        for(Employee employee : employees) {
+            employeeRepository.delete(employee.getEmployeeNumber());
+        }
+        return true;
+    }
+
+    //remove all employees from a particular department
+    public Boolean removeEmployeesFromDepartment(Long id) {
+        List<Employee> listOfEmployeesToRemove = findEmployeesOfDepartment(id);
+
+        for(Employee employee : listOfEmployeesToRemove) {
+            employeeRepository.delete(employee.getEmployeeNumber());
+        }
+
+        return true;
+    }
+
+    //remove all employees under a particular manager
+    public Boolean removeAllEmployeesUnderManager(Long id) {
+        List<Employee> minionList = new ArrayList<>();
+
+        for(Employee employee : minionList) {
+            employeeRepository.delete(employee.getEmployeeNumber());
+        }
+
+        return true;
+    }
+
+    //remove all direct reports to a manager. change all employees managed by deleted to next manager up the hierarchy.
+    public List<Employee> replaceManagerAndAbsorbEmployees(Long id) {
+        List<Employee> absorbedEmployees = new ArrayList<>();
+        Employee toBeDeletedEmployee = employeeRepository.findOne(id);
+
+        try {
+            Employee replacingManager = employeeRepository.findOne(toBeDeletedEmployee.getManagerID());
+            for(Employee employee : getAllEmployees()) {
+                if(employee.getManagerID() == toBeDeletedEmployee.getEmployeeNumber()) {
+                    employee.setManagerID(replacingManager.getManagerID());
+                    employeeRepository.save(employee);
+                    absorbedEmployees.add(employee);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return absorbedEmployees;
+    }
+
+    //get attributes of an employee
+    public String getEmployeeAttributes(Long id) {
+        return getEmployee(id).toString();
+    }
+
 }
