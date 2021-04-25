@@ -114,16 +114,19 @@ public class EmployeeServices {
     public List<Employee> findAllMinionsUnder(Long id) {
         List<Employee> minionList = new ArrayList<>();
         Employee currentEmployee = employeeRepository.findOne(id);
-        boolean found = true;
 
-        while(found) {
-            found = false;
-            for(Employee employee : employeeRepository.findAll()) {
-                if(employee.getManagerID() == currentEmployee.getEmployeeNumber()) {
-                    minionList.add(employee);
-                    found = true;
-                }
+        for(Employee employee : employeeRepository.findAll()) {
+            if(employee.getManagerID() == currentEmployee.getEmployeeNumber()) {
+                minionList.add(employee);
             }
+        }
+
+        List<Employee> subManagers = new ArrayList<>();
+        if(!minionList.isEmpty()) {
+            for(int i = 0; i < minionList.size(); i++) {
+                subManagers.addAll(findAllMinionsUnder(minionList.get(i).getEmployeeNumber()));
+            }
+            minionList.addAll(subManagers);
         }
 
         return minionList;
@@ -148,15 +151,12 @@ public class EmployeeServices {
         return true;
     }
 
-    //remove all employees under a particular manager
+    //remove all employees under a particular manager including indirect reports
     public Boolean removeAllEmployeesUnderManager(Long id) {
-        List<Employee> minionList = getAllEmployees();
-        Employee manager = getEmployee(id);
+        List<Employee> minionList = findAllMinionsUnder(id);
 
         for(Employee employee : minionList) {
-            if(employee.getManagerID() == manager.getEmployeeNumber()) {
-                employeeRepository.delete(employee.getEmployeeNumber());
-            }
+            employeeRepository.delete(employee.getEmployeeNumber());
         }
 
         return true;
